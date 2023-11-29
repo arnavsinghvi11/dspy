@@ -5,7 +5,7 @@ import threading
 from dspy.predict.retry import Retry
 
 from dspy.primitives import Example
-from dspy.primitives.assertions import assert_no_except_handler, assert_transform_module, bypass_assert_handler, suggest_backtrack_handler
+from dspy.primitives.assertions import assert_no_except_handler, assert_transform_module, bypass_assert_handler, suggest_backtrack_handler, noop_handler
 
 from .teleprompt import Teleprompter
 from .vanilla import LabeledFewShot
@@ -65,7 +65,7 @@ class BootstrapFewShot(Teleprompter):
 
         self.student = assert_transform_module(self.student)
         self.teacher = assert_transform_module(self.teacher, 
-            assertion_handler=lambda fun: suggest_backtrack_handler(assert_no_except_handler(fun)))
+            assertion_handler=lambda fun: suggest_backtrack_handler(noop_handler(fun)))
 
         if self.max_labeled_demos and self.teacher._compiled is False:
             teleprompter = LabeledFewShot(k=self.max_labeled_demos)

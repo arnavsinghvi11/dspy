@@ -54,5 +54,5 @@ class Retry(Predict):
             return self.forward(**kwargs)
         else:
             # seems like a hack, but it works for now
-            demos = kwargs.pop("demos", self.demos)
+            demos = kwargs.pop("demos", self.demos if self.demos is not None else [])
             return self.module(demos=demos, **kwargs)
